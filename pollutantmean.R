@@ -22,3 +22,21 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
         print(paste(length(my_var), pollutant, "values in vector from", length(id), "monitors" ))
         mean(my_var, na.rm = TRUE)
 }
+
+complete <- function(directory, id=1:332) {
+        my_result <- vector()
+        for(my_id in id ) {
+                site_path <- file.path(directory, sprintf("%0.3d.csv", my_id))
+                if (file.exists(site_path)) {
+                        my_data <- read.csv(site_path)
+                        my_complete <- sum(complete.cases(my_data))
+                        my_pair <- c(my_id, my_complete)
+                        my_result <- rbind(my_result, my_pair)
+                } else {
+                        print(paste("NOT found: ", site_path))
+                }
+        }
+        rownames(my_result) <- rep("", length(id))
+        colnames(my_result) <- c("id", "complete")
+        my_result
+}
