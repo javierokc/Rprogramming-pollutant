@@ -30,13 +30,13 @@ complete <- function(directory, id=1:332) {
                 if (file.exists(site_path)) {
                         my_data <- read.csv(site_path)
                         my_complete <- sum(complete.cases(my_data))
-                        my_pair <- c(my_id, my_complete)
-                        my_result <- rbind(my_result, my_pair)
+                        my_set <- c(my_id, my_complete, nrow(my_data))
+                        my_result <- rbind(my_result, my_set)
                 } else {
                         print(paste("NOT found: ", site_path))
                 }
         }
         rownames(my_result) <- rep("", length(id))
-        colnames(my_result) <- c("id", "complete")
+        colnames(my_result) <- c("id", "complete", "n")
         my_result
 }
