@@ -19,6 +19,6 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
       print(paste("NOT found: ", site_path))
     }
   }
-  print(length(my_var))
+  print(paste(length(my_var), "values in vector."))
   mean(my_var, na.rm = TRUE)
 }
