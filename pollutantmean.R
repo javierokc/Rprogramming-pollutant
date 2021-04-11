@@ -24,6 +24,7 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
 }
 
 complete <- function(directory, id=1:332) {
+        # compute number of complete cases for all the monitors indicated by id
         my_result <- vector()
         for(my_id in id ) {
                 site_path <- file.path(directory, sprintf("%0.3d.csv", my_id))
@@ -39,4 +40,21 @@ complete <- function(directory, id=1:332) {
         rownames(my_result) <- rep("", length(id))
         colnames(my_result) <- c("id", "complete", "n")
         my_result
+}
+
+corr <- function(directory, threshold = 0) {
+        print(directory)
+        # Compute correlation if the number of complete.cases is >= than threshold
+        for(my_id in dir(directory) ) {
+                site_path <- file.path(directory, my_id)
+                if (file.exists(site_path)) {
+                        my_data <- read.csv(site_path)
+                        my_complete <- sum(complete.cases(my_data))
+                        if (my_complete >= threshold) {
+                                my_result <- cor(na.omit(my_data)[, 2], na.omit(my_data)[, 3] )
+                        }
+                } else {
+                        print(paste("NOT found: ", site_path))
+                }
+        }
 }
