@@ -45,16 +45,20 @@ complete <- function(directory, id=1:332) {
 corr <- function(directory, threshold = 0) {
         print(directory)
         # Compute correlation if the number of complete.cases is >= than threshold
+        my_result = data.frame()
         for(my_id in dir(directory) ) {
                 site_path <- file.path(directory, my_id)
                 if (file.exists(site_path)) {
                         my_data <- read.csv(site_path)
                         my_complete <- sum(complete.cases(my_data))
                         if (my_complete >= threshold) {
-                                my_result <- cor(na.omit(my_data)[, 2], na.omit(my_data)[, 3] )
+                                my_cor <- cor(na.omit(my_data)[, 2], na.omit(my_data)[, 3] )
+                                my_result = rbind(my_result, list(id=my_id, cor=my_cor))
                         }
+                        
                 } else {
                         print(paste("NOT found: ", site_path))
                 }
         }
+        my_result
 }
